@@ -1,42 +1,28 @@
-#!/usr/bin/env python3
 
-import os
-from setuptools import setup
+from setuptools import setup, find_packages
+from ddrop.core.version import get_version
 
-# get key package details from py_pkg/__version__.py
-about = {}  # type: ignore
-here = os.path.abspath(os.path.dirname(__file__))
-with open(os.path.join(here, 'ddrop', '0.1')) as f:
-    exec(f.read(), about)
+VERSION = get_version()
 
-# load the README file and use it as the long_description for PyPI
-with open('README.md', 'r') as f:
-    readme = f.read()
+f = open('README.md', 'r')
+LONG_DESCRIPTION = f.read()
+f.close()
 
-# package configuration - for reference see:
-# https://setuptools.readthedocs.io/en/latest/setuptools.html#id9
 setup(
-    name=about['ddrop'],
-    description=about['ddrop - ddrop shares files in a multipart/multicloud and encrypted fashion'],
-    long_description=readme,
+    name='ddrop',
+    version=VERSION,
+    description='Manages remote archives',
+    long_description=LONG_DESCRIPTION,
     long_description_content_type='text/markdown',
-    version=about['0.1'],
-    author=about['nullvex'],
-    author_email=about['null@nullvex.com'],
-    url=about['nullvex.com'],
-    packages=['ddrop'],
+    author='nvx',
+    author_email='null@nullvex.com',
+    url='https://github.com/nullvex/ddrop',
+    license='unlicensed',
+    packages=find_packages(exclude=['ez_setup', 'tests*']),
+    package_data={'ddrop': ['templates/*']},
     include_package_data=True,
-    python_requires=">=3.7.*",
-    install_requires=['', ''],
-    license=about['Apache 2.0'],
-    zip_safe=True,
-    entry_points={
-        'console_scripts': ['ddrop=ddrop.entry_points:main'],
-    },
-    classifiers=[
-        'Development Status :: 2 - alpha',
-        'Intended Audience :: Developers',
-        'Programming Language :: Python :: 3.7',
-    ],
-    keywords='distributed dead file drop '
+    entry_points="""
+        [console_scripts]
+        ddrop = ddrop.main:main
+    """,
 )

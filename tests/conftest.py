@@ -1,55 +1,16 @@
 """
-
-tests.conftest.py
-~~~~~~~~~~~~~~~~~
-
-This module is used by PyTest to detect test fixtures that are used by
-multiple test modules. For more imformation on fixtures in PyTest, see
-https://docs.pytest.org/en/latest/fixture.html.
+PyTest Fixtures.
 """
 
-import json
-from typing import Any, Dict, List
-
 import pytest
+from cement import fs
 
-from py_pkg.curves import SupplyCurve, DemandCurve
-
-
-def load_test_data() -> List[Dict[str, Any]]:
-    """Load test data from JSON file.
-
-    :return: Test data.
-    :rtype: Dict[str, Any]
+@pytest.fixture(scope="function")
+def tmp(request):
     """
-
-    config_file_path = 'tests/test_data/supply_demand_data.json'
-    with open(config_file_path) as file:
-        json_data = file.read()
-
-    data = json.loads(json_data)
-    return data['supply_demand']
-
-
-@pytest.fixture
-def supply_curve() -> SupplyCurve:
-    """Return a supply curve for use with tests.
-
-    :return: A Supply curve.
-    :rtype: SupplyCurve
+    Create a `tmp` object that geneates a unique temporary directory, and file
+    for each test function that requires it.
     """
-
-    supply_demand_data = load_test_data()
-    return SupplyCurve(supply_demand_data)
-
-
-@pytest.fixture
-def demand_curve() -> DemandCurve:
-    """Return a demand curve for use with tests.
-
-    :return: A demand curve.
-    :rtype: DemandCurve
-    """
-
-    supply_demand_data = load_test_data()
-    return DemandCurve(supply_demand_data)
+    t = fs.Tmp()
+    yield t
+    t.remove()
