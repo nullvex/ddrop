@@ -3,3 +3,6 @@ cement[jinja2]
 cement[yaml]
 cement[colorlog]
 tinydb
+#pycrypto
+pycryptodome
+pyAesCrypt

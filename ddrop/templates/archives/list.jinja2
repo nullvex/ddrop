@@ -1,0 +1,3 @@
+{% for archive in archives %}
+{{ archive.doc_id }} [{% if archive.state == 'complete' %}X{% else %} {% endif %}] {{ archive.archive_name}} {{ archive.encrypted_file }}
+{% endfor %}

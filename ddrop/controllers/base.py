@@ -1,4 +1,3 @@
-
 from cement import Controller, ex
 from cement.utils.version import get_version_banner
 from ..core.version import get_version

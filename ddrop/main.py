@@ -1,4 +1,3 @@
-
 import os
 from tinydb import TinyDB
 from cement.utils import fs
@@ -6,7 +5,7 @@ from cement import App, TestApp, init_defaults
 from cement.core.exc import CaughtSignal
 from .core.exc import ddropError
 from .controllers.base import Base
-from .controllers.items import Items
+from .controllers.archive import Archive
 
 # configuration defaults
 CONFIG = init_defaults('ddrop')
@@ -63,7 +62,7 @@ class ddrop(App):
         # register handlers
         handlers = [
             Base,
-            Items
+            Archive
         ]
 
         hooks = [
