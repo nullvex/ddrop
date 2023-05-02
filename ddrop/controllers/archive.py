@@ -23,10 +23,13 @@ class Archive(Controller):
             ( ['-p', '--password'],
              {'help': 'a unique password',
               'action': 'store',
-              'dest': 'password' } ),
+              'dest': 'password',
+              'required': True
+             } ),
             ( ['-f', '--file'],
              {'help': 'the file to encrypt',
               'action': 'store',
+              'required': True,
               'dest': 'file_name' } )
         ],
     )
@@ -113,5 +116,8 @@ class Archive(Controller):
     )
     def delete(self):
         id = int(self.app.pargs.archive_id)
-        self.app.log.info('deleting  archive id: %s' % id)
+        record = self.app.db.get(doc_id=id)
+        delete_file = utils.delete_object(self, record['encrypted_file'])
+        self.app.log.info('deleting archive id: %s' % id)
+        self.app.log.info('deleting file: %s' % record['encrypted_file'])
         self.app.db.remove(doc_ids=[id])
