@@ -57,18 +57,34 @@ class utils:
         return out_filename
 
 
-    def decrypt_file(self, password, in_filename, out_filename=None, chunksize=24*1024):
-        """Decrypts a file using AES 512."""
+    def decrypt_file(self, password, in_filename=None, extract=None, out_filename=None, chunksize=24*1024):
+        """Decrypts a file using AES 256"""
+        #if the output file is not designated, designate a default
         if not out_filename:
             out_filename = "%s.decrypted.tar" % ( in_filename )
 
-        pyAesCrypt.decryptFile(in_filename , out_filename, password)
+        #Decrypt the file
+        extracted_file = pyAesCrypt.decryptFile(in_filename , out_filename, password)
+        self.app.log.info("Decrypted File %s" % (out_filename))
+
+        #extract flag specified, untar the archive
+        if extract:
+            target_extract = "extracted_%s" % (out_filename) 
+            print("out_filename: %s , in_filename: %s" % (target_extract, out_filename))
+            extracted_dir = utils.extract_tarfile(self, target_extract, out_filename)
 
         return out_filename
 
     def make_tarfile(self, output_filename, source_dir):
+        """ Create Tarball """
         with tarfile.open(output_filename, "w:gz") as tar:
             tar.add(source_dir, arcname=os.path.basename(source_dir))
+
+    def extract_tarfile(self, output_filename, source_filename):
+        """Extract Tarball"""
+        with tarfile.open(source_filename, "r") as tf:
+            extracted_dir = tf.extractall(path=output_filename)
+        return extracted_dir
 
     def make_directory(self, ts, file_path):
         directory_name = "%s_%s" % (file_path, ts)

@@ -6,3 +6,4 @@ tinydb
 #pycrypto
 pycryptodome
 pyAesCrypt
+google-cloud-storage
